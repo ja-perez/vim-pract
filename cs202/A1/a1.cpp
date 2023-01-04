@@ -61,18 +61,22 @@ void readFile(Candidate candidates[]) {
 
 void displayList(Candidate candidates[]) {
 	cout << "ALL CANDIDATES:\n";
-	cout << right << setw(11);
-       	cout << "First: " << "Last: " << "Votes: " << "\% Score:" << endl;
+	cout << right << setw(11) << "First: ";
+        cout << right << setw(11) << "Last:  ";
+        cout << right << setw(10) << "Votes:  ";
+       	cout << right << setw(11) << "\% Score: " << endl;
 	for (int i = 0; i < ARR_SIZE; i++) {
 		Candidate cand = candidates[i];
 		if (cand.votes == 0 && cand.pScore == 0) {
 			return;
 		}
-		cout << cand.first 
-			<< '\t' << cand.last 
-			<< '\t' << cand.votes 
-			<< '\t' << cand.pScore << endl; 
+		cout << right << setw(11) << cand.first; 
+		cout << right << setw(11) << cand.last;
+		cout << right << setw(10) << cand.votes;
+		cout << setw(12) << setfill(' ');
+		cout << cand.pScore << '%' << endl; 
 	}
+	cout << endl;
 }
 
 void sortByVotes(Candidate candidates[]) {

@@ -29,6 +29,8 @@ int main() {
 	Candidate cands[ARR_SIZE];
 	readFile(cands);
 	displayList(cands);
+	calculateScores(cands);
+	displayList(cands);
 }
 
 void readFile(Candidate candidates[]) {
@@ -68,15 +70,19 @@ void displayList(Candidate candidates[]) {
 	for (int i = 0; i < ARR_SIZE; i++) {
 		Candidate cand = candidates[i];
 		if (cand.votes == 0 && cand.pScore == 0) {
-			return;
+			cout << endl;
+			break;
 		}
 		cout << right << setw(11) << cand.first; 
 		cout << right << setw(11) << cand.last;
 		cout << right << setw(10) << cand.votes;
-		cout << setw(12) << setfill(' ');
-		cout << cand.pScore << '%' << endl; 
+		cout << setw(10) << " ";
+		if (cand.pScore - int(cand.pScore) != 0) {
+			cout << right << fixed << setprecision(2) << setw(5) << cand.pScore; 
+		}
+		else cout << right << setw(2) << cand.pScore;
+		cout << '%' << endl; 
 	}
-	cout << endl;
 }
 
 void sortByVotes(Candidate candidates[]) {
@@ -113,9 +119,21 @@ Candidate getLast(Candidate candidates[]) {
 }
 
 void calculateScores(Candidate candidates[]) {
+	int total = 0;
+	for (int i = 0; i < ARR_SIZE; i++) {
+		if (candidates[i].votes == 0) break;
+		total += candidates[i].votes;
+	}
+	for (int i = 0; i < ARR_SIZE; i++) {
+		if (candidates[i].votes == 0) break;
+		candidates[i].pScore = candidates[i].votes / double(total) * 100;
+	}
 }
 
 void roundScore(Candidate &cand) {
+	 double rem = cand.pScore - int(cand.pScore);
+	 int rnd = int(cand.pScore);
+	 cand.pScore = rem >= 0.5 ? rnd + 1 : rnd;
 }
 
 void formatLine(string &line) {

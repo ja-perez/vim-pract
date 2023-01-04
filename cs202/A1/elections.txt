@@ -3,7 +3,7 @@ F=Mary,L=Blue,V=2003
 F=Bill,L=Warren,V=1588
 F=Robert,L=Powell,V=5332
 F=Stan,L=SmithV=4429
-F=Laura,L=Rose,V=3341
+F=Laura,L=Rose,V=3392
 F=Peter,L=Green,V=3343
 F=Thomas,X=Anderson, V=1622
 F=Catherine,L=Johnson,V=2004

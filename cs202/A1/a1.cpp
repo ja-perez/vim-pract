@@ -89,6 +89,10 @@ void sortByVotes(Candidate candidates[]) {
 }
 
 void displayCandidate(Candidate cand) {
+	cout << setw(12) << left << "FIRST NAME: " << cand.first << endl;
+	cout << setw(12) << left << "LAST NAME: " << cand.last << endl;
+	cout << setw(12) << left << "VOTES: " << cand.votes << endl;
+	cout << setw(12) << left << "\% GAINED : " << cand.pScore << '%' << endl;
 }
 
 Candidate getWinner(Candidate candidates[]) {

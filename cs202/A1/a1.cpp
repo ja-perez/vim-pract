@@ -24,12 +24,25 @@ Candidate getLast(Candidate[]);
 void calculateScores(Candidate[]);
 void roundScore(Candidate &cand);
 void formatLine(string &line);
+void setCandidate(Candidate &dest, Candidate src);
 
 int main() {
 	Candidate cands[ARR_SIZE];
 	readFile(cands);
 	displayList(cands);
 	calculateScores(cands);
+	sortByVotes(cands);
+	displayList(cands);
+	Candidate winner = getWinner(cands);
+	Candidate last = getLast(cands);
+	cout << "\nwinner:\n";
+	displayCandidate(winner);
+	cout << "\nlowest score:\n";
+	displayCandidate(last);
+	roundScore(cands[8]);
+	roundScore(cands[7]);
+	roundScore(cands[6]);
+	cout << endl << endl;
 	displayList(cands);
 }
 
@@ -54,10 +67,9 @@ void readFile(Candidate candidates[]) {
 			candidates[i].votes = stoi(votes);
 			candidates[i].pScore = 0;
 			i++;
-			//cout << "iter:" << first << last << votes << endl;
 		}
-
 	}
+	candidates[i].first = "END";
 	infile.close();
 }
 
@@ -69,7 +81,7 @@ void displayList(Candidate candidates[]) {
        	cout << right << setw(11) << "\% Score: " << endl;
 	for (int i = 0; i < ARR_SIZE; i++) {
 		Candidate cand = candidates[i];
-		if (cand.votes == 0 && cand.pScore == 0) {
+		if (cand.first == "END") {
 			cout << endl;
 			break;
 		}
@@ -80,12 +92,30 @@ void displayList(Candidate candidates[]) {
 		if (cand.pScore - int(cand.pScore) != 0) {
 			cout << right << fixed << setprecision(2) << setw(5) << cand.pScore; 
 		}
-		else cout << right << setw(2) << cand.pScore;
+		else {
+			cout << right << setprecision(0) << setw(5) << cand.pScore;
+		}
 		cout << '%' << endl; 
 	}
 }
 
 void sortByVotes(Candidate candidates[]) {
+	int max_size = 0;
+	for (int i = 0; i < ARR_SIZE; i++) {
+		if (candidates[i].first == "END") break;
+		max_size ++;
+	}
+	for (int i = 0; i < max_size - 1; i++) {
+
+		for (int j = 0; j < max_size - 1 - i; j++) {
+			if (candidates[j].votes > candidates[j + 1].votes) {
+				Candidate temp;
+				setCandidate(temp, candidates[j]);
+				setCandidate(candidates[j], candidates[j+1]);
+				setCandidate(candidates[j+1], temp);
+			}
+		}
+	}
 }
 
 void displayCandidate(Candidate cand) {
@@ -98,12 +128,9 @@ void displayCandidate(Candidate cand) {
 Candidate getWinner(Candidate candidates[]) {
 	Candidate winner = candidates[0];
 	for (int i = 1; i < ARR_SIZE; i++) {
+		if (candidates[i].first == "END") break;
 		if (candidates[i].votes > winner.votes) {
-			winner.first = candidates[i].first;
-			winner.last = candidates[i].last;
-			winner.votes = candidates[i].votes;
-			winner.pScore = candidates[i].pScore;
-			
+			setCandidate(winner, candidates[i]);
 		}
 	}
 	return winner;
@@ -112,11 +139,9 @@ Candidate getWinner(Candidate candidates[]) {
 Candidate getLast(Candidate candidates[]) {
 	Candidate last = candidates[0];
 	for (int i = 1; i < ARR_SIZE; i++) {
+		if (candidates[i].first == "END") break;
 		if (last.votes > candidates[i].votes) {
-			last.first = candidates[i].first;
-			last.last = candidates[i].last;
-			last.votes = candidates[i].votes;
-			last.pScore = candidates[i].pScore;
+			setCandidate(last, candidates[i]);
 		}
 	}
 	return last;
@@ -125,13 +150,20 @@ Candidate getLast(Candidate candidates[]) {
 void calculateScores(Candidate candidates[]) {
 	int total = 0;
 	for (int i = 0; i < ARR_SIZE; i++) {
-		if (candidates[i].votes == 0) break;
+		if (candidates[i].first == "END") break;
 		total += candidates[i].votes;
 	}
 	for (int i = 0; i < ARR_SIZE; i++) {
-		if (candidates[i].votes == 0) break;
+		if (candidates[i].first == "END") break;
 		candidates[i].pScore = candidates[i].votes / double(total) * 100;
 	}
+}
+
+void setCandidate(Candidate &dest, Candidate src) {
+	dest.first = src.first;
+	dest.last = src.last;
+	dest.votes = src.votes;
+	dest.pScore = src.pScore;
 }
 
 void roundScore(Candidate &cand) {
